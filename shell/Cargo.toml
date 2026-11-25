@@ -1,0 +1,30 @@
+[package]
+name = "sentinel-shell"
+version = "0.1.0-alpha"
+edition = "2021"
+rust-version = "1.80"
+description = "SimpleGo OS shell: top bar, sidebar, Home menu and the SimpleGo OS apps (Settings, Clean Drop, Server)"
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/saschadaemgen/simplego-os"
+homepage = "https://simplego.dev"
+
+[[bin]]
+name = "sentinel-shell"
+path = "src/main.rs"
+
+[features]
+default = ["layer-shell"]
+# Anchors the bars to the screen edges via the Wayland layer-shell protocol.
+# Disable for local previews on systems without gtk4-layer-shell.
+layer-shell = ["dep:gtk4-layer-shell"]
+
+[dependencies]
+gtk = { package = "gtk4", version = "0.9", features = ["v4_12"] }
+gtk4-layer-shell = { version = "0.4", optional = true }
+
+[profile.release]
+opt-level = 2
+lto = false
+codegen-units = 16
+strip = true
+panic = "abort"

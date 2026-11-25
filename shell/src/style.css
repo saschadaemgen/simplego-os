@@ -1,0 +1,165 @@
+/* SimpleGo OS Shell - flat design: solid colors, thin lines, no gradients, no shadows.
+   Accent: metallic gold #d4af37; warnings orange #fb923c. */
+@define-color sx_bar      #121212;
+@define-color sx_side     #0e0e0e;
+@define-color sx_home     #0e0e0e;
+@define-color sx_card     #151515;
+@define-color sx_hover    #1c1c1c;
+@define-color sx_edge     #262626;
+@define-color sx_line     #1a1a1a;
+@define-color sx_text     #f2f2f2;
+@define-color sx_sub      #9a9a9a;
+@define-color sx_accent   #d4af37;
+@define-color sx_ok       #4ade80;
+@define-color sx_wait     #fb923c;
+@define-color sx_fail     #f87171;
+
+* { font-family: "Inter", "DejaVu Sans", sans-serif; transition: none; animation: none; }
+
+/* Strip every theme effect from our widgets. */
+button, entry, textview, text, scrolledwindow, flowbox, flowboxchild {
+  background-image: none; box-shadow: none; text-shadow: none; -gtk-icon-shadow: none;
+  outline: none;
+}
+button { background: transparent; border: none; border-radius: 12px; padding: 0; }
+
+window.sx-topbar, window.sx-sidebar, window.sx-preview { background: transparent; }
+window.sx-home { background: @sx_home; }
+window.sx-home.sx-parked { background: #000000; }
+
+.sx-topbar-box { background: @sx_bar; border-bottom: 1px solid @sx_edge; }
+.sx-sidebar-box { background-color: @sx_side; background-image: url("file:///usr/share/sentinel-x/grain.png"); background-repeat: repeat; border-right: 1px solid @sx_edge; }
+/* Sidebar content is SIDEBAR_W - 1 wide; with its 1 px border it lines up with the top bar divider. */
+
+/* Menu cell: fills the corner above the sidebar, no frame. */
+.sx-menu { border-radius: 0; }
+.sx-menu:hover, .sx-menu.active { background: @sx_hover; }
+
+.sx-clock { color: @sx_text; font-weight: 800; font-size: 15px; }
+.sx-date  { color: @sx_sub;  font-weight: 600; font-size: 14px; margin-left: 10px; }
+
+/* Top bar status fields: same build as the sidebar rows, split by full-height lines. */
+.sx-vline { background: @sx_line; min-width: 1px; }
+.sx-vline.edge { background: @sx_edge; }
+.sx-seg { padding: 0 22px; }
+.sx-seg:hover { background: @sx_hover; }
+.sx-seg-val { color: @sx_text; font-weight: 800; font-size: 13px; }
+.sx-seg-key { color: @sx_sub; font-weight: 700; font-size: 9px; letter-spacing: 1.5px; margin-top: 1px; }
+
+/* Shutdown cell, top right, mirrors the menu cell: red power symbol.
+   One click powers everything off; the cell turns solid red at once as feedback. */
+.sx-power { border-radius: 0; }
+.sx-power:hover { background: @sx_hover; }
+.sx-power.armed, .sx-power.armed:hover { background: @sx_fail; }
+
+/* Sidebar launchers. */
+.sx-launcher { min-width: 49px; min-height: 50px; margin: 3px 7px; transition: opacity 450ms ease-in-out; }
+.sx-launcher:hover { background: @sx_hover; }
+/* Running marker: bar on the left edge next to the icon (styles below). */
+.sx-run-bar { min-width: 3px; border-radius: 0 3px 3px 0; }
+
+/* Sidebar system section: plain rows across the full width, split by lines. */
+.sx-side-line { background: @sx_line; min-height: 1px; }
+.sx-sys-row { padding: 12px 0 11px 0; }
+.sx-sys-val { color: @sx_text; font-weight: 800; font-size: 16px; }
+.sx-sys-key { color: @sx_sub; font-weight: 700; font-size: 10px; letter-spacing: 1px; margin-top: 2px; }
+
+.ok   { color: @sx_ok; }
+.wait { color: @sx_wait; }
+.fail { color: @sx_fail; }
+
+/* ---------------------------------------------------------------- Home (fullscreen menu) */
+.sx-home-box { padding: 36px 40px 32px 40px; }
+
+entry.sx-search {
+  background: @sx_card; color: @sx_text; border: 1px solid @sx_line; border-radius: 14px;
+  min-height: 44px; padding: 0 16px; font-size: 16px; caret-color: @sx_accent;
+}
+entry.sx-search:focus-within { border-color: @sx_accent; }
+entry.sx-search image { color: @sx_sub; }
+
+.sx-section { color: @sx_sub; font-weight: 700; font-size: 11px; letter-spacing: 2px; margin: 22px 0 10px 4px; }
+
+flowbox.sx-apps { background: transparent; }
+flowboxchild { padding: 0; background: transparent; }
+.sx-app { min-width: 116px; min-height: 108px; }
+.sx-app:hover, flowboxchild:selected .sx-app { background: @sx_hover; }
+.sx-app-name { color: @sx_text; font-size: 12px; font-weight: 600; margin-top: 8px; }
+
+.sx-card {
+  background: @sx_card; border: 1px solid @sx_line; border-radius: 16px; padding: 18px 20px;
+}
+.sx-card-title { color: @sx_sub; font-weight: 700; font-size: 11px; letter-spacing: 2px; margin-bottom: 10px; }
+.sx-stat-key { color: @sx_sub; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
+.sx-stat-val { color: @sx_text; font-weight: 800; font-size: 15px; }
+.sx-stat-row { padding: 7px 0; }
+
+textview.sx-notes, textview.sx-notes text {
+  background: transparent; color: @sx_text; font-size: 14px; caret-color: @sx_accent;
+}
+
+.sx-action {
+  background: @sx_card; border: 1px solid @sx_line; border-radius: 12px;
+  min-height: 42px; padding: 0 16px; color: @sx_text; font-weight: 700; font-size: 13px;
+}
+.sx-action:hover { background: @sx_hover; border-color: @sx_accent; }
+.sx-action.danger:hover { border-color: @sx_fail; color: @sx_fail; }
+
+/* Preview only: stand-in for the content area. */
+.sx-content { background: #000000; }
+
+/* ---------------------------------------------------------------- SERVER info panel */
+window.sx-info-win { background: transparent; }
+.sx-info-clip, .sx-info-clip > viewport { background: transparent; }
+.sx-info { background: @sx_bar; border: 1px solid @sx_edge; border-top: none; border-radius: 0 0 16px 16px; padding: 18px 20px 16px 20px; }
+.sx-info-dot { min-width: 12px; min-height: 12px; border-radius: 99px; background: @sx_sub; }
+.sx-info-dot.ok { background: @sx_ok; }
+.sx-info-dot.wait { background: @sx_wait; }
+.sx-info-dot.fail { background: @sx_fail; }
+.sx-info-kicker { color: @sx_accent; font-weight: 800; font-size: 10px; letter-spacing: 2px; }
+.sx-info-title { color: @sx_text; font-weight: 800; font-size: 18px; letter-spacing: 1.5px; }
+.sx-info-title.lost { color: @sx_sub; }
+.sx-info-mark { min-width: 6px; min-height: 6px; border-radius: 99px; background: @sx_sub; }
+.sx-info-mark.ok { background: @sx_ok; }
+.sx-info-mark.wait { background: @sx_wait; }
+.sx-info-mark.fail { background: @sx_fail; }
+.sx-info-issue { color: @sx_text; font-size: 13px; }
+.sx-info-fig { background: @sx_card; border: 1px solid @sx_line; border-radius: 12px; padding: 10px 12px; }
+.sx-info-fig-val { color: @sx_text; font-weight: 800; font-size: 15px; }
+.sx-info-fig-key { color: @sx_sub; font-weight: 700; font-size: 9px; letter-spacing: 1.5px; }
+.sx-info-hint { color: @sx_sub; font-size: 11px; }
+.sx-info-title.ok, .sx-info-fig-val.ok { color: @sx_ok; }
+.sx-info-title.wait, .sx-info-fig-val.wait { color: @sx_wait; }
+.sx-info-title.fail, .sx-info-fig-val.fail { color: @sx_fail; }
+
+/* ---------------------------------------------------------------- clock (time over date) */
+.sx-clock-time { color: @sx_text; font-weight: 700; font-size: 15px; font-feature-settings: "tnum"; }
+.sx-clock-date { color: @sx_sub; font-weight: 500; font-size: 10px; letter-spacing: 0.5px; font-feature-settings: "tnum"; margin-top: -1px; }
+
+/* ---------------------------------------------------------------- sidebar markers */
+.sx-run-bar { background: @sx_sub; min-height: 12px; }
+.sx-run-bar.active { background: @sx_accent; min-height: 30px; }
+/* Launching: the whole icon dims and brightens (blink driven by the shell). */
+.sx-launcher.sx-blink-off { opacity: 0.55; }
+
+/* ---------------------------------------------------------------- Tor Browser context buttons */
+.sx-ctx-btn { border-radius: 0; padding: 0 16px; background: transparent; }
+.sx-ctx-btn:hover { background: @sx_hover; }
+.sx-ctx-icon { color: @sx_accent; }
+.sx-ctx-label { color: @sx_text; font-weight: 800; font-size: 10px; letter-spacing: 1.4px; }
+
+/* ---------------------------------------------------------------- Tor page */
+.sx-tor-kicker { color: @sx_accent; font-weight: 800; font-size: 11px; letter-spacing: 2.4px; }
+.sx-tor-title { color: @sx_text; font-weight: 300; font-size: 30px; margin-top: 4px; }
+.sx-bm { min-width: 250px; min-height: 64px; padding: 10px 14px; background: @sx_card; border: 1px solid @sx_line; border-radius: 14px; }
+.sx-bm:hover { background: @sx_hover; border-color: @sx_edge; }
+.sx-bm-avatar { min-width: 36px; min-height: 36px; border-radius: 99px; background: @sx_accent; color: #16120a; font-weight: 800; font-size: 15px; }
+.sx-bm-title { color: @sx_text; font-size: 14px; font-weight: 600; }
+.sx-bm-host { color: @sx_sub; font-size: 12px; }
+
+/* Twinkling stars on the desktop: crisp gold points, no blur. */
+.sx-star { background: #d4af37; border-radius: 50%; box-shadow: none; }
+.sx-star-s { background: #b8962f; }
+.sx-star-m { background: #d4af37; }
+.sx-star-l { background: #ecd58a; }
+.sx-star-flare { background: #fff6dc; }

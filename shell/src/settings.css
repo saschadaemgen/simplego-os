@@ -1,0 +1,149 @@
+/* SimpleGo OS Settings and power menu, in the SimpleGo design system.
+   Tokens: background #0A0A0B, sheet #0F0F11, surface #161618, line #1E1E21, tile-border #232326,
+   disc #2A2416, gold #D4AF37 (gradient #E2C25A to #BE9A2C), text #F2F2F2, secondary #9C9CA3,
+   warning #FB923C. Radii 14 (cards), 22 (sheets), pill. No frames under 2 px. */
+
+* { font-family: "Inter", "DejaVu Sans", sans-serif; }
+window.sg-window, .sg-root { background-color: #0A0A0B; color: #F2F2F2; }
+
+/* type */
+.sg-h1 { font-family: "Space Grotesk", "Inter", sans-serif; font-size: 28px; font-weight: 600; color: #F2F2F2; }
+.sg-h2 { font-family: "Space Grotesk", "Inter", sans-serif; font-size: 22px; font-weight: 600; color: #F2F2F2; }
+.sg-body { font-size: 16px; font-weight: 500; color: #F2F2F2; }
+.sg-sub { font-size: 14px; color: #9C9CA3; }
+.sg-hint { font-size: 12px; color: #9C9CA3; }
+.sg-cap { font-size: 12px; letter-spacing: 1px; color: #9C9CA3; }
+.sg-value { font-size: 14px; font-weight: 600; color: #F2F2F2; }
+.sg-mode { font-size: 14px; font-weight: 600; color: #D4AF37; }
+.warn, .sg-value.warn, .sg-hint.warn { color: #FB923C; }
+.sg-status { font-size: 12px; font-weight: 600; color: #FB923C; margin: 0 16px 12px 16px; }
+.sg-mark { font-family: "Space Grotesk", "Inter", sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 4px; margin-bottom: 4px; }
+.sg-bigmark { font-family: "Space Grotesk", "Inter", sans-serif; font-size: 30px; font-weight: 600; letter-spacing: 8px; }
+
+/* left list */
+.sg-aside { background-color: #0F0F11; }
+.sg-asidehead { min-height: 88px; }
+.sg-groups { padding: 0 16px 32px 16px; }
+.sg-card { background-color: #161618; border-radius: 14px; }
+.sg-card.warn { background-color: rgba(251, 146, 60, 0.08); transition: background-color 300ms ease; }
+.sg-sep { background-color: #1E1E21; min-height: 1px; }
+.sg-aside .sg-sep { background-color: #232326; }
+
+button.sg-navrow, button.sg-listbtn {
+  background: none; background-color: transparent; border: none; box-shadow: none; border-radius: 0;
+  min-height: 52px; padding: 0 14px; color: #F2F2F2; transition: background-color 200ms ease;
+}
+button.sg-listbtn { padding: 0 16px; }
+.sg-card > button.sg-navrow:first-child, .sg-card > button.sg-listbtn:first-child { border-top-left-radius: 14px; border-top-right-radius: 14px; }
+.sg-card > button.sg-navrow:last-child, .sg-card > button.sg-listbtn:last-child { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+button.sg-navrow:hover, button.sg-listbtn:hover { background-color: #1C1C1F; }
+button.sg-navrow.active { background-color: #2A2416; }
+.sg-navval { font-size: 14px; color: #9C9CA3; }
+.sg-navval.active { color: #D4AF37; }
+
+/* right side */
+.sg-header { min-height: 88px; }
+button.sg-close {
+  min-width: 44px; min-height: 44px; padding: 0; border-radius: 9999px; border: none; box-shadow: none;
+  background: none; background-color: #161618; transition: background-color 200ms ease;
+}
+button.sg-close:hover { background-color: #232326; }
+.sg-col { padding: 0 0 0 0; }
+.sg-row { min-height: 52px; padding: 0 16px; }
+.sg-row.tall { min-height: 64px; padding: 8px 16px; }
+.sg-trigger { padding: 14px 16px; }
+.sg-legend { padding: 12px 16px; }
+.sg-hero { background-color: #161618; border-radius: 22px; padding: 24px; }
+.sg-abouthead { padding: 16px 0; }
+scrolledwindow, scrolledwindow > viewport { background-color: transparent; }
+scrollbar { background-color: transparent; border: none; }
+scrollbar slider { background-color: #232326; border-radius: 9999px; min-width: 6px; min-height: 6px; border: none; }
+
+/* segmented control */
+.sg-segbar { background-color: #0F0F11; border-radius: 9999px; padding: 4px; }
+button.sg-seg {
+  min-height: 40px; padding: 0 6px; border-radius: 9999px; border: none; box-shadow: none;
+  background: none; background-color: transparent; color: #9C9CA3; font-size: 14px; font-weight: 600;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+button.sg-seg:hover { color: #F2F2F2; }
+button.sg-seg:checked { background-color: #D4AF37; color: #0A0A0B; }
+button.sg-seg label { font-size: 14px; font-weight: 600; }
+
+/* switch: grey when off, warning orange when the lock screen is allowed */
+switch.sg-switch {
+  min-width: 51px; min-height: 31px; padding: 0; border: none; border-radius: 9999px;
+  background: none; background-color: #232326; box-shadow: none; transition: background-color 220ms ease;
+}
+switch.sg-switch:checked { background-color: #FB923C; }
+switch.sg-switch > image { opacity: 0; }
+switch.sg-switch > slider {
+  min-width: 27px; min-height: 27px; margin: 2px; border: none; border-radius: 9999px;
+  background: none; background-color: #F2F2F2; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* buttons */
+button.sg-gold {
+  min-height: 56px; border-radius: 9999px; border: none; color: #0A0A0B;
+  background-image: linear-gradient(180deg, #E2C25A 0%, #D4AF37 55%, #BE9A2C 100%);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.22), inset 0 1px 0 rgba(255, 243, 196, 0.6);
+}
+button.sg-gold label { color: #0A0A0B; font-size: 17px; font-weight: 600; }
+button.sg-gold.big { min-height: 58px; }
+button.sg-gold:active { background-image: linear-gradient(180deg, #D4AF37 0%, #BE9A2C 100%); }
+button.sg-outline {
+  min-height: 56px; border-radius: 9999px; border: 2px solid #FB923C; box-shadow: none;
+  background: none; background-color: transparent; transition: background-color 200ms ease;
+}
+button.sg-outline label { color: #FB923C; font-size: 16px; font-weight: 600; }
+button.sg-outline:hover { background-color: rgba(251, 146, 60, 0.08); }
+button.sg-plain {
+  min-height: 52px; border-radius: 9999px; border: none; box-shadow: none;
+  background: none; background-color: transparent; transition: background-color 200ms ease;
+}
+button.sg-plain label { color: #9C9CA3; font-size: 16px; font-weight: 600; }
+button.sg-plain:hover { background-color: #161618; }
+button:focus-visible { outline: 2px solid #E2C25A; outline-offset: 3px; }
+
+/* warning dialog over the window */
+.sg-scrim { background-color: rgba(5, 5, 6, 0.72); }
+.sg-dialog { background-color: #161618; border-radius: 22px; padding: 28px 24px 24px 24px; box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.55); }
+.sg-warndisc { background-color: rgba(251, 146, 60, 0.12); border-radius: 9999px; }
+.sg-dlgbtns { margin-top: 12px; }
+
+/* power menu ("Ask"): full screen, dimmed, sheet in the middle */
+window.sg-menuwin { background-color: transparent; }
+.sg-menubackdrop { background-color: rgba(5, 5, 6, 0.72); }
+.sg-sheet { background-color: #0F0F11; border-radius: 22px; padding: 28px 20px 20px 20px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6); }
+
+/* v2 additions: full width pages, sliders, level bars, drop downs */
+.sg-pagebody { padding: 0 40px 48px 40px; }
+.sg-header { min-height: 88px; }
+.sg-version { margin-top: 2px; margin-bottom: 4px; }
+.sg-value.gold { color: #D4AF37; }
+.sg-row.warnbg { background-color: rgba(251, 146, 60, 0.08); }
+.sg-sep.nav { background-color: #232326; }
+button.sg-navrow { min-height: 60px; }
+switch.sg-switch:checked { background-color: #D4AF37; }
+switch.sg-switch.warn:checked { background-color: #FB923C; }
+scale.sg-scale { padding: 6px 0; }
+scale.sg-scale trough { min-height: 6px; border-radius: 9999px; background-color: #0F0F11; border: none; }
+scale.sg-scale highlight { border-radius: 9999px; background-image: linear-gradient(90deg, #BE9A2C, #E2C25A); border: none; }
+scale.sg-scale slider { min-width: 22px; min-height: 22px; margin: -8px; border-radius: 9999px; background-color: #F2F2F2; border: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); }
+levelbar.sg-level trough { min-height: 8px; border-radius: 9999px; background-color: #0F0F11; border: none; padding: 0; }
+levelbar.sg-level block.filled { border-radius: 9999px; background-image: linear-gradient(90deg, #BE9A2C, #E2C25A); border: none; }
+levelbar.sg-level block.empty { background-color: transparent; border: none; }
+dropdown.sg-drop > button { background: none; background-color: #0F0F11; border: none; border-radius: 9999px; padding: 6px 14px; color: #F2F2F2; box-shadow: none; }
+dropdown.sg-drop > button:hover { background-color: #232326; }
+popover contents { background-color: #161618; border-radius: 14px; border: none; }
+popover listview row:selected, popover listview row:hover { background-color: #2A2416; }
+.sg-btnrow { padding: 16px; }
+button.sg-outline-gold { min-height: 52px; border-radius: 9999px; border: 2px solid #D4AF37; background: none; background-color: transparent; box-shadow: none; }
+button.sg-outline-gold label { color: #D4AF37; font-size: 16px; font-weight: 600; }
+button.sg-listbtn { padding: 8px 16px; }
+scale.sg-scale highlight { margin: 0; min-height: 6px; }
+scale.sg-scale trough { margin: 0 11px; }
+/* v4: no titles on top; aside and content start at the same height */
+.sg-groups { padding-top: 48px; }
+.sg-pagebody { padding: 24px 40px 48px 40px; }
+.sg-asidefoot { margin-bottom: 6px; }

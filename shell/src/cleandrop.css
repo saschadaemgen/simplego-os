@@ -1,0 +1,55 @@
+/* ---------------------------------------------------------------- Clean Drop */
+window.cd-window { background: @sx_home; }
+.cd-root { padding: 36px 40px 28px 40px; }
+.cd-kicker { color: @sx_accent; font-weight: 800; font-size: 11px; letter-spacing: 2.5px; }
+.cd-title { color: @sx_text; font-weight: 300; font-size: 30px; }
+.cd-sub { color: @sx_sub; font-size: 13px; }
+
+.cd-btn {
+  background: @sx_card; border: 1px solid @sx_line; border-radius: 12px;
+  min-height: 42px; padding: 0 18px; color: @sx_text; font-weight: 700; font-size: 13px;
+}
+.cd-btn:hover { background: @sx_hover; border-color: @sx_accent; }
+.cd-icon-btn { min-width: 36px; min-height: 36px; border-radius: 10px; color: @sx_sub; }
+.cd-icon-btn:hover { background: @sx_hover; color: @sx_text; }
+/* Window close: red and larger than the row buttons. */
+.cd-close { min-width: 46px; min-height: 46px; border-radius: 12px; color: @sx_fail;
+            border: 1px solid @sx_line; background: @sx_card; }
+.cd-close image { -gtk-icon-size: 22px; }
+.cd-close:hover { background: @sx_fail; color: #0a0204; border-color: @sx_fail; }
+
+.cd-drop {
+  margin-top: 28px; border: 1px solid @sx_line; border-radius: 18px; background: @sx_card;
+}
+.cd-drop-title { color: @sx_text; font-weight: 800; font-size: 22px; }
+
+.cd-scroll { margin-top: 28px; background: transparent; }
+.cd-row { background: @sx_card; border: 1px solid @sx_line; border-radius: 16px; padding: 16px 18px; }
+.cd-name { color: @sx_text; font-weight: 700; font-size: 15px; }
+.cd-status { font-weight: 800; font-size: 11px; letter-spacing: 1.5px; padding: 6px 12px;
+             border: 1px solid @sx_line; border-radius: 10px; background: @sx_bar; }
+.cd-status.muted { color: @sx_sub; }
+.cd-link { color: @sx_accent; font-weight: 700; font-size: 13px; padding: 4px 10px; border-radius: 8px; }
+.cd-link:hover { background: @sx_hover; }
+
+.cd-details { margin-top: 14px; border-top: 1px solid @sx_line; padding-top: 10px; }
+.cd-field { padding: 4px 0; }
+.cd-field-key { color: @sx_sub; font-family: "DejaVu Sans Mono", monospace; font-size: 12px; }
+.cd-field-key.critical { color: @sx_fail; font-weight: 700; }
+.cd-field-val { color: @sx_text; font-family: "DejaVu Sans Mono", monospace; font-size: 12px; }
+
+.cd-actions { margin-top: 14px; border-top: 1px solid @sx_line; padding-top: 12px; }
+.cd-small {
+  background: @sx_bar; border: 1px solid @sx_line; border-radius: 10px;
+  min-height: 32px; padding: 0 14px; color: @sx_text; font-weight: 700; font-size: 12px;
+}
+.cd-small:hover { background: @sx_hover; border-color: @sx_accent; }
+.cd-small.danger:hover { border-color: @sx_fail; color: @sx_fail; }
+
+.cd-foot { margin-top: 20px; }
+.cd-primary {
+  background: @sx_accent; color: #16120a; border-radius: 12px; min-height: 46px; padding: 0 26px;
+  font-weight: 800; font-size: 14px;
+}
+.cd-primary:hover { background: #3a9bff; }
+.cd-primary:disabled { background: @sx_card; color: @sx_sub; border: 1px solid @sx_line; }
