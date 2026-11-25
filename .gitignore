@@ -1,0 +1,24 @@
+# Rust build output
+target/
+**/*.rs.bk
+
+# Local configuration that can hold secrets: server and onion addresses, keys, passwords.
+# These never belong in this repository; they are supplied on the laptop at setup time.
+server/local/
+*.local.conf
+servers.txt
+*.key
+*.pem
+*_ed25519
+*_ed25519.pub
+*.auth_private
+onion_auth/
+_secrets/
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+*.Zone.Identifier
+.DS_Store
