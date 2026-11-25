@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""simplego-input-apply: keyboard and touchpad from SimpleGo OS Settings into labwc.
+
+Writes <keyboard> repeat values and the touchpad <libinput> device into ~/.config/labwc/rc.xml,
+XKB_DEFAULT_LAYOUT into ~/.config/labwc/environment, then reloads labwc. The first run keeps
+rc.xml.simplego-orig; a file that does not parse after writing is restored at once."""
+import os, shutil, subprocess, xml.etree.ElementTree as ET
+
+cfg = os.environ.get('XDG_CONFIG_HOME') or os.path.expanduser('~/.config')
+conf = {}
+try:
+    for line in open(os.path.join(cfg, 'sentinel-os', 'settings.conf')):
+        if '=' in line and not line.startswith('#'):
+            k, v = line.split('=', 1)
+            conf[k.strip()] = v.strip()
+except OSError:
+    pass
+
+def num(k, d):
+    try:
+        return max(0, min(100, int(conf.get(k, d))))
+    except ValueError:
+        return d
+
+def flag(k, d):
+    return {'on': True, 'off': False}.get(conf.get(k, ''), d)
+
+layout = conf.get('kb.layout', 'us')
+layout = layout if layout in ('us', 'de') else 'us'
+delay = 200 + num('kb.delay', 40) * 8          # 200 .. 1000 ms
+rate = 10 + num('kb.rate', 60) // 2            # 10 .. 60 per second
+speed = (num('tp.speed', 50) - 50) / 50.0      # -1 .. 1
+yn = lambda b: 'yes' if b else 'no'
+
+rc = os.path.join(cfg, 'labwc', 'rc.xml')
+if os.path.exists(rc):
+    orig = rc + '.simplego-orig'
+    if not os.path.exists(orig):
+        shutil.copy2(rc, orig)
+    keep = rc + '.simplego-last'
+    shutil.copy2(rc, keep)
+    tree = ET.parse(rc)
+    root = tree.getroot()
+    ns = root.tag[1:root.tag.index('}')] if root.tag.startswith('{') else ''
+    if ns:
+        ET.register_namespace('', ns)
+    q = lambda t: '{%s}%s' % (ns, t) if ns else t
+
+    def child(parent, tag, attrs=None):
+        for c in parent.findall(q(tag)):
+            if not attrs or all(c.get(a) == v for a, v in attrs.items()):
+                return c
+        c = ET.SubElement(parent, q(tag))
+        for a, v in (attrs or {}).items():
+            c.set(a, v)
+        return c
+
+    kb = child(root, 'keyboard')
+    child(kb, 'repeatRate').text = str(rate)
+    child(kb, 'repeatDelay').text = str(delay)
+    dev = child(child(root, 'libinput'), 'device', {'category': 'touchpad'})
+    child(dev, 'tap').text = yn(flag('tp.tap', True))
+    child(dev, 'naturalScroll').text = yn(flag('tp.natural', False))
+    child(dev, 'disableWhileTyping').text = yn(flag('tp.dwt', True))
+    child(dev, 'pointerSpeed').text = '%.2f' % speed
+    tree.write(rc, encoding='utf-8', xml_declaration=True)
+    try:
+        ET.parse(rc)
+    except ET.ParseError:
+        shutil.copy2(keep, rc)
+
+env = os.path.join(cfg, 'labwc', 'environment')
+lines = []
+if os.path.exists(env):
+    lines = [l for l in open(env).read().splitlines() if not l.startswith('XKB_DEFAULT_LAYOUT=')]
+lines.append('XKB_DEFAULT_LAYOUT=' + layout)
+os.makedirs(os.path.dirname(env), exist_ok=True)
+open(env, 'w').write('\n'.join(lines) + '\n')
+subprocess.run(['pkill', '-HUP', '-x', 'labwc'], check=False)

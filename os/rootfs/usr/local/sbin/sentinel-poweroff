@@ -1,0 +1,34 @@
+#!/bin/sh
+# sentinel-poweroff (SimpleGo OS, version 2, 2026-11-25)
+#   instant  sync, read only, wipe the disk key from memory, power off; if the power is still on
+#            after 15 seconds: immediate restart to the disk passphrase prompt
+#   fast     systemctl poweroff --force
+#   normal   systemctl poweroff
+#   reboot   systemctl reboot
+case "$1" in
+  instant)
+    sync
+    # kernel messages on the text console: a hanging power off shows its cause
+    echo 8 > /proc/sys/kernel/printk 2>/dev/null
+    # a free text console (the session may own tty1)
+    cur=$(fgconsole 2>/dev/null)
+    if [ "$cur" = 2 ]; then chvt 3 2>/dev/null; else chvt 2 2>/dev/null; fi
+    # everything that needs the disk is looked up before the disk key is wiped
+    MAPS=$(dmsetup ls --target crypt 2>/dev/null | awk '{print $1}')
+    echo s > /proc/sysrq-trigger
+    echo u > /proc/sysrq-trigger
+    for m in $MAPS; do cryptsetup luksSuspend "$m" 2>/dev/null; done
+    # from here only shell builtins and /proc: the disk is no longer readable
+    read up rest < /proc/uptime
+    t0=${up%.*}
+    echo o > /proc/sysrq-trigger
+    while :; do
+      read up rest < /proc/uptime
+      [ "${up%.*}" -ge $((t0 + 15)) ] && break
+    done
+    echo b > /proc/sysrq-trigger ;;
+  fast)   exec systemctl poweroff --force ;;
+  normal) exec systemctl poweroff ;;
+  reboot) exec systemctl reboot ;;
+  *) echo "usage: sentinel-poweroff instant|fast|normal|reboot" >&2; exit 2 ;;
+esac

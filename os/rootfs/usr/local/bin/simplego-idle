@@ -1,0 +1,13 @@
+#!/bin/sh
+# simplego-idle: when nobody uses the laptop for the time set in SimpleGo OS Settings
+# (5 minutes, 15 minutes, 1 hour or never), it runs sentinel-lock, which powers off (unless the lock screen
+# is allowed). No screen saver, no standby. Lid, suspend and lock requests keep going through
+# sentinel-lock in every case. Restarted by the autostart loop after a change in the settings app.
+C="${XDG_CONFIG_HOME:-$HOME/.config}/sentinel-os/settings.conf"
+P=$(sed -n 's/^idle.poweroff=//p' "$C" 2>/dev/null | tail -n 1)
+case "$P" in 5|15|60|0) ;; *) P=15;; esac
+L=/usr/local/bin/sentinel-lock
+if [ "$P" = 0 ]; then
+  exec swayidle -w before-sleep "$L" lock "$L"
+fi
+exec swayidle -w timeout $((P * 60)) "$L" before-sleep "$L" lock "$L"

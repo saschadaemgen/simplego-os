@@ -1,0 +1,44 @@
+#!/bin/sh
+# simplego-settings-helper: root actions for SimpleGo OS Settings.
+# Called as `sudo -n simplego-settings-helper <verb> [value]`; only these verbs, values checked.
+set -u
+case "${1:-}" in
+  brightness)
+    p="${2:-}"; case "$p" in ''|*[!0-9]*) exit 2;; esac
+    [ "$p" -ge 1 ] && [ "$p" -le 100 ] || exit 2
+    exec brightnessctl -q set "$p%";;
+  camera)
+    case "${2:-}" in on) exec modprobe uvcvideo;; off) exec modprobe -r uvcvideo;; *) exit 2;; esac;;
+  bluetooth|wifi)
+    t=$1; [ "$t" = wifi ] && t=wlan
+    case "${2:-}" in on) exec rfkill unblock "$t";; off) exec rfkill block "$t";; *) exit 2;; esac;;
+  timezone)
+    z="${2:-}"; timedatectl list-timezones | grep -qxF -- "$z" || exit 2
+    exec timedatectl set-timezone "$z";;
+  battery)
+    p="${2:-}"; case "$p" in 3|5|10) ;; *) exit 2;; esac
+    f=/etc/UPower/UPower.conf; [ -f "$f" ] || exit 3
+    set_key() { if grep -q "^$1=" "$f"; then sed -i "s|^$1=.*|$1=$2|" "$f"; else printf '%s=%s\n' "$1" "$2" >> "$f"; fi; }
+    set_key UsePercentageForPolicy true
+    set_key PercentageLow $((p + 10))
+    set_key PercentageCritical $((p + 2))
+    set_key PercentageAction "$p"
+    set_key CriticalPowerAction PowerOff
+    systemctl restart upower;;
+  luks-status)
+    dev=$(lsblk -rpno NAME,FSTYPE | awk '$2=="crypto_LUKS"{print $1; exit}'); [ -n "$dev" ] || exit 3
+    d=$(cryptsetup luksDump "$dev") || exit 3
+    echo "device=$dev"
+    echo "version=$(printf '%s\n' "$d" | awk '/^Version:/{print $2; exit}')"
+    echo "cipher=$(printf '%s\n' "$d" | awk '/^[[:space:]]+cipher:/{print $2; exit}')"
+    echo "bits=$(printf '%s\n' "$d" | awk '/Cipher key:/{print $3; exit}')"
+    echo "pbkdf=$(printf '%s\n' "$d" | awk '/PBKDF:/{print $2; exit}')"
+    m=$(printf '%s\n' "$d" | awk '/Memory:/{print $2; exit}')
+    case "$m" in ''|*[!0-9]*) ;; *) echo "memory=$((m / 1024)) MiB";; esac;;
+  killswitch-status)
+    if nft list table inet sentinel_killswitch >/dev/null 2>&1; then echo active; else echo inactive; fi;;
+  updates-check)
+    apt-get update -qq >/dev/null 2>&1 || { echo fail; exit 1; }
+    apt-get -s upgrade 2>/dev/null | grep -c '^Inst ' || true;;
+  *) exit 2;;
+esac

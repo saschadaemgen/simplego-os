@@ -1,0 +1,9 @@
+#!/bin/sh
+# SIMPLEGO-LOCK-SWITCH
+# SimpleGo OS: the lock screen is optional and off by default. It is switched on only in the
+# settings app (file ~/.config/simplego/lock-screen = on). While it is off, every lock request
+# (Super + L, idle timeout, power menu) powers the laptop off, so the disk is encrypted again.
+# /usr/local/bin/sentinel-lock-screen is the lock screen itself (gtklock with the SimpleGo look).
+C="${XDG_CONFIG_HOME:-$HOME/.config}/simplego/lock-screen"
+if [ "$(cat "$C" 2>/dev/null)" = on ]; then exec /usr/local/bin/sentinel-lock-screen "$@"; fi
+exec sudo -n /usr/local/sbin/sentinel-poweroff instant || exec systemctl poweroff -i

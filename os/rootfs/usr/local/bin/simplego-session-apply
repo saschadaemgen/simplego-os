@@ -1,0 +1,17 @@
+#!/bin/sh
+# simplego-session-apply: applies SimpleGo OS Settings at login.
+# Microphone muted at every start, display scale, night light, keyboard and touchpad.
+C="${XDG_CONFIG_HOME:-$HOME/.config}/sentinel-os/settings.conf"
+raw() { v=$(sed -n "s/^$1=//p" "$C" 2>/dev/null | tail -n 1); echo "${v:-$2}"; }
+i=0
+while [ $i -lt 30 ] && ! wpctl status >/dev/null 2>&1; do sleep 1; i=$((i + 1)); done
+wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1 2>/dev/null
+S=$(raw display.scale 1); case "$S" in 1|1.25|1.5|2) ;; *) S=1;; esac
+for o in $(wlr-randr 2>/dev/null | awk '/^[^ ]/{print $1}'); do wlr-randr --output "$o" --scale "$S" 2>/dev/null; done
+if [ "$(raw night.on off)" = on ]; then
+  W=$(raw night.warm 50); case "$W" in ''|*[!0-9]*) W=50;; esac
+  pkill -x wlsunset 2>/dev/null
+  setsid -f wlsunset -t $((6400 - W * 40)) -T 6500 -s 00:00 -S 23:59 -d 60 >/dev/null 2>&1
+fi
+/usr/local/bin/simplego-input-apply >/dev/null 2>&1
+exit 0

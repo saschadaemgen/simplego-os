@@ -1,0 +1,4 @@
+# SimpleGo OS: fixed root actions for the working user (replace USER with the login name and
+# install as /etc/sudoers.d/91-simplego, mode 0440, checked with visudo -cf).
+USER ALL=(root) NOPASSWD: /usr/local/sbin/sentinel-poweroff
+USER ALL=(root) NOPASSWD: /usr/local/sbin/simplego-settings-helper

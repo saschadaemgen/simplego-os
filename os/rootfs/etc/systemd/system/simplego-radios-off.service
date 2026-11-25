@@ -1,0 +1,11 @@
+[Unit]
+Description=SimpleGo OS: Bluetooth off at every start
+After=systemd-rfkill.service
+Wants=systemd-rfkill.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/rfkill block bluetooth
+
+[Install]
+WantedBy=multi-user.target
